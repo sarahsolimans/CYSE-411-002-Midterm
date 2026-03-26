@@ -21,10 +21,18 @@ let currentFilter = "all";
 
 
 function loadDashboardState() {
-    const raw   = localStorage.getItem("dashboardState");
-    const state = JSON.parse(raw);             // No try/catch
-    currentFilter = state.filter;              // No enum validation
-    applyFilter(currentFilter);
+    try {
+        const raw = localStorage.getItem("dashboardState");
+        const state = JSON.parse(raw);             // No try/catch
+        currentFilter = state.filter;              // No enum validation
+        applyFilter(currentFilter);
+    } catch (e) {
+        console.error("Failed to parse dashboard state", e);
+    }
+   
+    } catch (e) {
+        console.error("Failed to parse dashboard state", e);
+    }
 }
 
 
@@ -78,7 +86,7 @@ function renderIncidents(incidents) {
     incidents.forEach(function (incident) {
         const item = document.createElement("li");
         // UNSAFE – directly inserts API response as HTML
-        item.innerHTML =
+        item.textContent =
             "<strong>" + incident.title + "</strong>" +
             " <span class='severity severity-" + incident.severity + "'>" +
             incident.severity + "</span>";
